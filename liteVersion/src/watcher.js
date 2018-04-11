@@ -1,4 +1,4 @@
-class watch {
+class Watcher {
   constructor(vm,expOrFn,cb){
     this.cb = cb;
     this.vm = vm;
@@ -11,7 +11,7 @@ class watch {
       this.getter = this.parseGetter(expOrFn);
     }
 
-    this.value = this.getter();
+    this.value = this.get();
   }
 
   update(){
@@ -29,17 +29,17 @@ class watch {
 
   get(){
     Dep.target = this;
-    const value = this.getter.call(this.vm);
+    let value = this.getter.call(this.vm, this.vm);
     Dep.target = null;
     return value;
   }
 
   parseGetter(exp) {
-    if(/([^\w]) || (\.$)/.test(exp)) return;
+    if(/[^\w.$]/.test(exp)) return;
     let exps = exp.split('.');
 
     return function(obj) {
-      for(let i=0, len = exps.length;i<len;i++) {
+      for(let i=0, len = exps.length; i<len; i++) {
         if(!obj) return;
         obj = obj[exps[i]];
       }

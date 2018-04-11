@@ -74,7 +74,7 @@ class Dep {
   }
 
   notify() {
-    this.subs.forEach(()=>{
+    this.subs.forEach((sub)=>{
       sub.update();
     })
   }

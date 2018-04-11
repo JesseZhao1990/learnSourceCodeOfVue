@@ -22,9 +22,9 @@ class MVVM {
   }
 
   _proxyData(key,setter,getter){
-    const me = this;
+    let me = this;
     setter = setter || 
-    Object.defineProperties(me,key,{
+    Object.defineProperty(me,key,{
       configurable: false,
       enumerable: true,
       get: function(){
@@ -38,10 +38,21 @@ class MVVM {
 
   _initComputed(){
     const me = this;
+    const computed = this.$options.computed;
+    if(typeof computed === 'object'){
+      Object.keys(computed).forEach((key)=>{
+        Object.defineProperty(me,key,{
+          get: function(){
+                  if(typeof computed[key] === 'function'){
+                    return computed[key].call(me)
+                  }else{
+                    return computed[key].get.call(me)
+                  }
+                },
+          set: function(){}
+        })
+      })
+    }
   }
-
-
-
-
 
 }

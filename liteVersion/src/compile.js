@@ -34,7 +34,7 @@ class Compile {
       if(this.isElementNode(node)){
           this.compile(node);
       }else if(this.isTextNode(node) && reg.test(text)){
-        this.compileText(node,RegExp.$1);
+        this.compileText(node,reg.exec(text)[0].replace(/(\{\{)(.*)(\}\})/,'$2').trim());
       }
 
       if(node.childNodes && node.childNodes.length){
@@ -49,7 +49,7 @@ class Compile {
       const attrName = attr.name;
       if(this.isDirective(attrName)){
         const exp = attr.value;
-        const dir = attrName.subString(2);
+        const dir = attrName.substring(2);
         // 事件指令
         if(this.isEventDirective(dir)) {
           compileUtil.eventHandler(node,this.$vm,exp,dir);
@@ -94,13 +94,12 @@ const compileUtil = {
   model: function(node,vm,exp){
     this.bind(node,vm,exp,'model');
     const me = this;
-    const val = this._getVMVal(vm, exp);
+    let val = this._getVMVal(vm, exp);
     node.addEventListener('input',function(e){
       const newValue = e.target.value;
       if(val=== newValue) {
         return;
       }
-
       me._setVMVal(vm,exp,newValue);
       val = newValue;
     })
@@ -120,7 +119,7 @@ const compileUtil = {
     const eventType = dir.split(':')[1];
     const fn = vm.$options.methods && vm.$options.methods[exp];
     if(eventType && fn) {
-      node.addeventListener(eventType, fn.bind(vm), false);
+      node.addEventListener(eventType, fn.bind(vm), false);
     }
   },
 
