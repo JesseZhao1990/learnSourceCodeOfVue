@@ -32,7 +32,7 @@ class Compile {
       const text = node.textContent;
       const reg = /\{\{.*\}\}/;
       if(this.isElementNode(node)){
-          this.compileNode(node);
+          this.compile(node);
       }else if(this.isTextNode(node) && reg.test(text)){
         this.compileText(node,RegExp.$1);
       }
