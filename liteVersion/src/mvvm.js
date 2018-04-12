@@ -42,13 +42,14 @@ class MVVM {
     if(typeof computed === 'object'){
       Object.keys(computed).forEach((key)=>{
         Object.defineProperty(me,key,{
-          get: function(){
-                  if(typeof computed[key] === 'function'){
-                    return computed[key].call(me)
-                  }else{
-                    return computed[key].get.call(me)
-                  }
-                },
+          get:typeof computed[key] === 'function' ? computed[key] : computed[key].get,
+          // get: function(){
+          //         if(typeof computed[key] === 'function'){
+          //           return computed[key].call(me)
+          //         }else{
+          //           return computed[key].get.call(me)
+          //         }
+          //       },
           set: function(){}
         })
       })

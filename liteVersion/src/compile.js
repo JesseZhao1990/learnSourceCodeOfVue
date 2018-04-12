@@ -160,6 +160,7 @@ const updater = {
     node.className = className + space + value;
   },
   modelUpdater: function(node,value,oldValue){
+    console.log(value);
     node.value = typeof value === 'undefined' ? '' : value;
   }
 }

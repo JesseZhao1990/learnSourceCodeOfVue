@@ -19,7 +19,7 @@ class Watcher {
   }
 
   run(){
-    const value = this.getter();
+    const value = this.get();
     const oldVal = this.value;
     if(value !== oldVal){
       this.value = value;
