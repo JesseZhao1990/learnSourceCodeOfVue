@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>snabbdom demo</title>
+    </head>
+    <body>
+        <div id="container"></div>
+        <button id='btn'>change</button>
+        <script src="https://cdn.bootcss.com/snabbdom/0.7.1/snabbdom.js"></script>
+        <script src="https://cdn.bootcss.com/snabbdom/0.7.1/snabbdom-class.js"></script>
+        <script src="https://cdn.bootcss.com/snabbdom/0.7.1/snabbdom-attributes.js"></script>
+        <script src="https://cdn.bootcss.com/snabbdom/0.7.1/snabbdom-props.js"></script>
+        <script src="https://cdn.bootcss.com/snabbdom/0.7.1/snabbdom-style.js"></script>
+        <script src="https://cdn.bootcss.com/snabbdom/0.7.1/snabbdom-eventlisteners.js"></script>
+        <script src="https://cdn.bootcss.com/snabbdom/0.7.1/h.js"></script>
+
+        <script type="text/javascript">
+           var snabbdom = window.snabbdom
+           // 定义关键韩式 patch
+           var patch = snabbdom.init([
+                snabbdom_class,
+                snabbdom_props,
+                snabbdom_style,
+                snabbdom_eventlisteners
+           ])
+
+           // 定义关键函数 h
+           var h = snabbdom.h
+
+           // 定义原始数据
+           var data = [{
+               name:'zhangsan',
+               age:20,
+           },{
+               name:'lisi',
+               age:22,
+           },{
+               name:'wanger',
+               age:25,
+           }];
+           // 获取到页面中真实的dom container
+           var container = document.getElementById('container');
+
+           // 定义渲染函数
+           var vnode;
+           function render(data){
+               var newVnode = h('ul',{},data.map(function(item){
+                   return h('li',{},[h('span',{},item.name),h('span',{},item.age)])
+               }));
+               if(vnode){
+                   // re-render
+                   patch(vnode, newVnode);
+               }else{
+                   // 初次渲染
+                   patch(container, newVnode);
+               }
+               vnode = newVnode;
+           }
+
+           // 初次渲染
+           render(data);
+
+           // 获取button按钮
+           var btn = document.getElementById('btn');
+           btn.addEventListener('click', function(){
+               data[1].name = 'mazi';
+               data[2].age = 999;
+               render(data);
+           })
+
+        </script>
+    </body>
+</html>
